@@ -13,7 +13,6 @@ close all; clear all;
 Mvalues = [1 10 100];
 %Angle of the desired UE
 varphiDesired = pi/6;
-
 %Range of angles of the interfering UE
 varphiInterfererDegrees = -180:1:180;
 varphiInterfererRadians = varphiInterfererDegrees*(pi/180);
@@ -23,32 +22,31 @@ antennaSpacing = 1/2; %Half wavelength distance
 
 %Preallocate matrix for storing the simulation results
 gfunction = zeros(length(varphiInterfererDegrees),length(Mvalues));
+gfunction = zeros(length(varphiInterfererDegrees),length(Mvalues));
 
 
 %% Go through all number of antennas
-for m = 1:length(Mvalues)
-    
+for m = 1:length(Mvalues)    
     %Generate channel response for the desired UE using (1.23)
-    hdesired = exp(1i*2*pi*antennaSpacing*sin(varphiDesired)*(0:Mvalues(m)-1)');
-    
+    hdesired = exp(1i*2*pi*antennaSpacing*sin(varphiDesired)*(0:Mvalues(m)-1)');    
     %Go through all angles of interfering UE
-    for n = 1:length(varphiInterfererRadians)
-        
+    for n = 1:length(varphiInterfererRadians)        
         %Generate channel response for the interfering UE using (1.23)
-        hinterfering = exp(1i*2*pi*antennaSpacing*sin(varphiInterfererRadians(n))*(0:Mvalues(m)-1)');
-        
+        hinterfering = exp(1i*2*pi*antennaSpacing*sin(varphiInterfererRadians(n))*(0:Mvalues(m)-1)');        
         %Compute the g-function in (1.28), using its definition
-        gfunction(n,m) = abs(hdesired'*hinterfering)^2/Mvalues(m);
-        
-    end
-    
+        gfunction(n,m) = abs(hdesired'*hinterfering)^2/Mvalues(m); 
+        if abs(sin(varphiDesired)-sin(varphiInterfererRadians(n)))>0.0001
+        gfunction1(n,m) =(sin(pi*Mvalues(m)*antennaSpacing*(sin(varphiDesired)-sin(varphiInterfererRadians(n)))).^2)./(eps+Mvalues(m)*sin(1*pi*antennaSpacing*(sin(varphiDesired)-sin(varphiInterfererRadians(n))))^2); 
+        else
+            gfunction1(n,m) =Mvalues(m);
+        end            
+        % check the difference between the gfunction and gfunction1
+    end    
 end
-
-
 %% Plot the simulation results
-figure; LineWidth =2;
-hold on; box on;
-
+% dd=(abs(gfunction-gfunction1)) 
+% plot(dd(:,2))
+figure; LineWidth =2; hold on; box on;
 plot(varphiInterfererDegrees,gfunction(:,1),'k-','LineWidth',LineWidth);
 plot(varphiInterfererDegrees,gfunction(:,2),'r--','LineWidth',LineWidth);
 plot(varphiInterfererDegrees,gfunction(:,3),'b-.','LineWidth',LineWidth);
@@ -61,3 +59,4 @@ xlim([-180 180]);
 ylim([1e-5 1e2]);
 
 legend('M=1','M=10','M=100','Location','NorthWest');
+Post_plot;

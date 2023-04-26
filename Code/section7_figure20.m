@@ -91,7 +91,8 @@ for b = 1:numel(beta)-1
     plot(x(1:nth:end),y(1:nth:end),'LineStyle', 'none','Color', Colors{b}, 'LineWidth', 1, 'Marker', Markers{b})
 end
 
-xlim([-40,-10])
+xlim([-40,-10 ]); ylim([0 1 ])
+
 legend('Same region', 'Different regions','\beta=1', '\beta=-5 dB', '\beta=0','Location','NorthWest')
 xlabel('Average UE correlation [dB]')
-ylabel('CDF')
+ylabel('CDF'); Post_plot;

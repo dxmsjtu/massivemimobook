@@ -1,37 +1,21 @@
-%This Matlab script can be used to reproduce Figures 7.31-32 in the monograph:
-%
-%Emil Bjornson, Jakob Hoydis and Luca Sanguinetti (2017), 
-%"Massive MIMO Networks: Spectral, Energy, and Hardware Efficiency", 
-%Foundations and Trends in Signal Processing: Vol. 11, No. 3-4, 
-%pp. 154-655. DOI: 10.1561/2000000093.
-%
-%For further information, visit: https://www.massivemimobook.com
-%
-%This is version 1.0 (Last edited: 2017-11-04)
-%
-%License: This code is licensed under the GPLv2 license. If you in any way
-%use this code for research that results in publications, please cite our
-%monograph as described above.
-
-
+%% This Matlab script can be used to reproduce Figures 7.31-32 in the monograph:
+%Emil Bjornson, Jakob Hoydis and Luca Sanguinetti (2017), "Massive MIMO Networks: Spectral, Energy, and Hardware Efficiency", 
+%Foundations and Trends in Signal Processing: Vol. 11, No. 3-4, pp. 154-655. DOI: 10.1561/2000000093.
+%% For further information, visit: https://www.massivemimobook.com
+%% This is version 1.01 (Last edited: 2019-04-17)
+%% For further information, visit: https://www.massivemimobook.com
+%%This is version 1.0 (Last edited: 2017-11-04) License: This code is licensed under the GPLv2 license. If you in any way use this code for research that
 %Empty workspace and close figures
-close all;
-clear;
-
-
+close all; clear all;
 %% Define parameters
-
 %The total number of antennas is twice the actual value, since we assume
 %that every antenna is dual-polarized and later select a subset that
 %corresponds to the two different cases illustrated in Figure 7.30
 Mtotal = 512; 
-
 %Effective number of antennas that are used in the simulation
 Meff = [2 4 8 16 32 64 128 256];
 
-
 %% Compute covariance matrices for both UEs
-
 %Define the angles of the three UEs
 varphi1 = pi/180*30;
 varphi2 = pi/180*25;
@@ -47,7 +31,6 @@ antennaSpacing = 1/2;
 R1 = functionRlocalscattering(Mtotal/2,varphi1,ASDdeg,antennaSpacing);
 R2 = functionRlocalscattering(Mtotal/2,varphi2,ASDdeg,antennaSpacing);
 R3 = functionRlocalscattering(Mtotal/2,varphi3,ASDdeg,antennaSpacing);
-
 
 %% Precompute polarization correlation matrices
 F_BS = eye(2); %Value of (7.35) with perfect XPI
@@ -70,16 +53,13 @@ LC1 = sqrtm(kron(R1,C_r));
 LC2 = sqrtm(kron(R2,C_r));
 LC3 = sqrtm(kron(R3,C_r));
 
-
 %% Monte Carlo simulations
-numberOfRealizations = 10000;
-
+numberOfRealizations = 1000; % 10000
 %Prepare to save simulation results
 Cor_unipl2 = zeros(numel(Meff),numberOfRealizations);
 Cor_dpl2 = zeros(numel(Meff),numberOfRealizations);
 Cor_unipl3 = zeros(numel(Meff),numberOfRealizations);
 Cor_dpl3 = zeros(numel(Meff),numberOfRealizations);
-
 Restup1 = cell(numel(Meff),1);
 Restdp1 = cell(numel(Meff),1);
 Restup3 = cell(numel(Meff),1);
@@ -91,10 +71,8 @@ for m = 1:numel(Meff)
     Restup3{m} = zeros(Meff(m));
     Restdp3{m} = zeros(Meff(m));
 end
-
 %Go through all channel realizations
-for it = 1:numberOfRealizations
-    
+for it = 1:numberOfRealizations    
     % Generate UE polarization vectors in (7.36) with random phase offsets
     theta_r1 = 2*pi*rand(1);
     theta_r2 = 2*pi*rand(1);
@@ -112,28 +90,21 @@ for it = 1:numberOfRealizations
     Z3 = (LC3*W3*RC) .* S;
     h1 = M_BSL*Z1*m_UE1;
     h2 = M_BSL*Z2*m_UE2;
-    h3 = M_BSL*Z3*m_UE3;
-    
+    h3 = M_BSL*Z3*m_UE3;    
     % Compute correlation coefficients
-    for m = 1:numel(Meff)
-        
+    for m = 1:numel(Meff)        
         %By selecting every other antenna, we get a uni-polarized array
-        uniplv_ind = 1:2:2*Meff(m);
-        
+        uniplv_ind = 1:2:2*Meff(m);        
         %By selecting the antennas in a particular pattern, we get a
         %dual-polarized array without having co-located antennas
-        dpl_ind = ones(1,Meff(m));
-        
-        for l = 2:Meff(m)
-            
+        dpl_ind = ones(1,Meff(m));        
+        for l = 2:Meff(m)            
             if (~mod(l,2))
                 dpl_ind(l) = dpl_ind(l-1) + 3;
             else
                 dpl_ind(l) = dpl_ind(l-1) + 1;
-            end
-            
-        end
-        
+            end            
+        end        
         %Compute the correlation between channels between UE 1 and UE 2
         Cor_unipl2(m,it) = (abs(h1(uniplv_ind)'*h2(uniplv_ind))/norm(h1(uniplv_ind))/norm(h2(uniplv_ind)))^2;
         Cor_dpl2(m,it) = (abs(h1(dpl_ind)'*h2(dpl_ind))/norm(h1(dpl_ind))/norm(h2(dpl_ind)))^2;
@@ -148,14 +119,10 @@ for it = 1:numberOfRealizations
         
         %Compute spatial correlation matrices of UE 1
         Restup3{m} = Restup3{m} + h3(uniplv_ind)*h3(uniplv_ind)'/numberOfRealizations;
-        Restdp3{m} = Restdp3{m} + h3(dpl_ind)*h3(dpl_ind)'/numberOfRealizations;
-        
-    end
-    
+        Restdp3{m} = Restdp3{m} + h3(dpl_ind)*h3(dpl_ind)'/numberOfRealizations;        
+    end    
 end
-
-%Compute the average correlation between UE channels, to be plotted in
-%Figure 7.31
+%Compute the average correlation between UE channels, to be plotted in Figure 7.31
 Avg_Cor_unipl1 = mean(Cor_unipl2,2);
 Avg_Cor_dpl1 = mean(Cor_dpl2,2);
 Avg_Cor_unipl3 = mean(Cor_unipl3,2);
@@ -166,32 +133,25 @@ rankdp = zeros(numel(Meff),1);
 chdup = zeros(numel(Meff),1);
 chddp = zeros(numel(Meff),1);
 
-for m = 1:numel(Meff)
-    
+for m = 1:numel(Meff)    
     %Compute rank of correlation matrices to be plotted in Figure 7.32a
     rankup(m) = rank(Restup1{m});
-    rankdp(m) = rank(Restdp1{m});
-    
-    %Compute chordal distance between correlation matrices of UE 1 and UE 3
-    %to be plotted in Figure 7.32b
+    rankdp(m) = rank(Restdp1{m});    
+    %Compute chordal distance between correlation matrices of UE 1 and UE 3 to be plotted in Figure 7.32b
     [U1up,~] = svd(Restup1{m});
     U1up = U1up(:,1:rank(Restup1{m}));
     [U3up,~] = svd(Restup3{m}, 'econ');
-    U3up = U3up(:,1:rank(Restup3{m}));
-    
+    U3up = U3up(:,1:rank(Restup3{m}));    
     chdup(m) = norm(U1up*U1up' - U3up*U3up','fro')^2;
     [U1dp,~] = svd(Restdp1{m}, 'econ');
     U1dp = U1dp(:,1:rank(Restdp1{m}));
     [U3dp,~] = svd(Restdp3{m}, 'econ');
     U3dp = U3dp(:,1:rank(Restdp3{m}));
-    chddp(m) = norm(U1dp*U1dp' - U3dp*U3dp','fro')^2;
-    
+    chddp(m) = norm(U1dp*U1dp' - U3dp*U3dp','fro')^2;    
 end
 
-
 %% Plot the simulation results
-figure;
-hold on; box on;
+figure; hold on; box on;
 plot(Meff,Avg_Cor_unipl1, 'k-', 'LineWidth', 1)
 plot(Meff,Avg_Cor_dpl1, 'r--', 'LineWidth', 1)
 plot(Meff,Avg_Cor_unipl3, 'k-', 'LineWidth', 1)

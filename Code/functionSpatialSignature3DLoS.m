@@ -27,8 +27,8 @@ function a = functionSpatialSignature3DLoS(U,varphi,theta,lambda)
 %monograph as described above.
 
 
-%Define the wave vector in (7.11)
+%Define the wave vector in (7.12)
 k = -2*pi/lambda * [cos(varphi)*cos(theta); sin(varphi)*cos(theta); sin(theta)];
 
-%Compute the spatial signature as in (7.12)
+%Compute the spatial signature as in (7.13)
 a = transpose(exp(1i* k'*U));
