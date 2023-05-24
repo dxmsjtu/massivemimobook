@@ -30,7 +30,9 @@ R1 = functionRlocalscattering(M,varphiDesired,ASDdeg,antennaSpacing);
 %% Go through all angles of interfering UE
 for n = 1:length(varphiInterfererRadians)    
     %Output simulation progress
-    if mod(n,10)==10 disp([num2str(n) ' angles out of ' num2str(length(varphiInterfererRadians))]);     end
+    if mod(n,10)==1 
+        disp([num2str(n) ' angles out of ' num2str(length(varphiInterfererRadians))]);   
+    end
     %Compute the spatial correlation matrix of the interfering UE
     R2 = functionRlocalscattering(M,varphiInterfererRadians(n),ASDdeg,antennaSpacing);    
     %Go through all number of antennas
@@ -57,3 +59,4 @@ xlim([-180 180]); set(gca,'YScale','log');
 %legend('Same SNR','10 dB weaker','20 dB weaker','Location','SouthWest');
 legend('Same SNR','10 dB weaker','20 dB weaker','Location','NorthWest');
 Post_plot;
+set(gcf,'outerposition',get(0,'screensize'));

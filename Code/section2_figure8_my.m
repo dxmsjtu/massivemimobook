@@ -43,3 +43,5 @@ xlabel('Angle of interfering UE [degree]');
 ylabel('Variance in (2.19)');
 xlim([-180 180]);
 legend('Gaussian, ASD 10^o','Gaussian, ASD 30^o','Uncorrelated','Location','NorthWest');
+Post_plot;
+set(gcf,'outerposition',get(0,'screensize'));

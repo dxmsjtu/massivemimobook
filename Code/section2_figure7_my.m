@@ -40,3 +40,4 @@ xlabel('Number of antennas (M)');
 ylabel('Variance in (2.17)');
 legend('Gaussian, ASD 10^o','Gaussian, ASD 30^o','Uncorrelated','Location','NorthEast');
 ylim([0 0.2]);Post_plot;
+set(gcf,'outerposition',get(0,'screensize'));

@@ -42,3 +42,4 @@ xlabel('ASD $$(\sigma_{\varphi})$$ [degree]','Interpreter','latex');
 ylabel('NMSE');set(gca,'YScale','log');
 legend('Local scattering model','Limit: Uncorrelated','Location','SouthEast');
 Post_plot;
+set(gcf,'outerposition',get(0,'screensize'));

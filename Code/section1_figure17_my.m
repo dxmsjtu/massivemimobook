@@ -18,7 +18,8 @@ K = 1:20;
 %Define range of antenna-UE ratios
 c = [1 2 4 8];
 %Extract the maximal number of UEs and BS antennas
-Kmax = max(K); Mmax = Kmax*max(c);
+Kmax = max(K);
+Mmax = Kmax*max(c);
 
 %Select number of Monte Carlo realizations for the line-of-sight (LoS) angles and of the non-line-of-sight (NLoS) Rayleigh fading
 numberOfRealizations = 100; % 10000
@@ -33,7 +34,7 @@ varphiInterfering = 2*pi*rand(1,Kmax,numberOfRealizations);
 
 %Define the antenna spacing (in number of wavelengths)
 antennaSpacing = 1/2;
-%Generate LoS channels with different random UE angles
+%Generate LoS channels with different random UE angles  (1.23) of [1].
 H_LoS_desired =  exp( repmat((0:Mmax-1)',[1 Kmax numberOfRealizations]) .* repmat(-2i*pi*antennaSpacing*sin(varphiDesired),[Mmax 1 1]) );
 H_LoS_interfering =  sqrt(betabar)*exp( repmat((0:Mmax-1)',[1 Kmax numberOfRealizations]) .* repmat(-2i*pi*antennaSpacing*sin(varphiInterfering),[Mmax 1 1]) );
 %Preallocate matrices for storing the simulation results

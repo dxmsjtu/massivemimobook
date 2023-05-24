@@ -23,11 +23,11 @@ h = (randn(Mmax,1)+1i*randn(Mmax,1))/sqrt(2);
 %Compute the normalized squared norm
 h2 = cumsum(abs(h(:,1)).^2)./M;
 %% Plot the simulation results
-figure; hold on; box on;
-plot(M,ones(Mmax,1),'k-','LineWidth',1);
-plot(M,minval./(2*M),'b--','LineWidth',1);
+figure; hold on; box on; LineWidth = 2;
+plot(M,ones(Mmax,1),'k-','LineWidth',LineWidth);
+plot(M,minval./(2*M),'b--','LineWidth',LineWidth);
 plot(M,h2,'r-','LineWidth',1);
-plot(M,maxval./(2*M),'b--','LineWidth',1);
+plot(M,maxval./(2*M),'b--','LineWidth',LineWidth);
 
 legend('Mean value','Percentiles','One realization');
 xlabel('Number of antennas (M)');

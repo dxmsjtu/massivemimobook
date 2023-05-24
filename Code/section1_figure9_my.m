@@ -1,17 +1,17 @@
 %This Matlab script can be used to reproduce Figure 1.9 in the monograph:
-%
 %Emil Bjornson, Jakob Hoydis and Luca Sanguinetti (2017), "Massive MIMO Networks: Spectral, Energy, and Hardware Efficiency", 
 %Foundations and Trends in Signal Processing: Vol. 11, No. 3-4, pp. 154-655. DOI: 10.1561/2000000093.
-%
-%For further information, visit: https://www.massivemimobook.com
-%% This is version 1.0 (Last edited: 2017-11-04)
-%% License: This code is licensed under the GPLv2 license. If you in any way
+%%For further information, visit: https://www.massivemimobook.com
+% This is version 1.0 (Last edited: 2017-11-04)
+% License: This code is licensed under the GPLv2 license. If you in any way
 % use this code for research that results in publications, please cite our monograph as described above. %Empty workspace and close figures
 close all; clear all;
+
 %Define the SNR range for analytical curves
-SNRdB = -10:0.1:50; SNR = 10.^(SNRdB/10);
+SNRdB_Up =60;
+SNRdB = -10:0.1:SNRdB_Up; SNR = 10.^(SNRdB/10);
 %Define the SNR range for Monte Carlo simulations
-SNRdB_montecarlo = -10:5:50;
+SNRdB_montecarlo = -10:5:SNRdB_Up;
 SNR_montecarlo = 10.^(SNRdB_montecarlo/10);
 %Define the different beta_bar values (strength of inter-cell interference)
 betabar = [1e-1 1e-3]';

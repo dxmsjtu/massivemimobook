@@ -1,16 +1,15 @@
 %% This Matlab script can be used to reproduce Figure 1.13 in the monograph:
 %% Emil Bjornson, Jakob Hoydis and Luca Sanguinetti (2017), "Massive MIMO Networks: Spectral, Energy, and Hardware Efficiency", 
 %Foundations and Trends in Signal Processing: Vol. 11, No. 3-4, pp. 154-655. DOI: 10.1561/2000000093.
-%For further information, visit: https://www.massivemimobook.com. This is version 1.01 (Last edited: 2021-07-29)
-%
-%License: This code is licensed under the GPLv2 license. If you in any way
+% For further information, visit: https://www.massivemimobook.com. This is version 1.01 (Last edited: 2021-07-29)
+%% License: This code is licensed under the GPLv2 license. If you in any way
 %use this code for research that results in publications, please cite our monograph as described above.
 %Empty workspace and close figures
 close all; clear all;
 %Define the range of number of BS antennas
 M = [10 100];
 %Select the number of Monte Carlo realizations of the Rayleigh fading
-numberOfRealizations = 1000; % 1000000
+numberOfRealizations = 10000; % 1000000
 %Generate random UE angles from 0 to 2*pi
 varphiDesired = 2*pi*rand(1,numberOfRealizations);
 varphiInterfering = 2*pi*rand(1,numberOfRealizations);
@@ -28,7 +27,7 @@ for mindex = 1:length(M)
     interferenceGainLoS(:,mindex) = ((1-cos(argument*M(mindex)))./(1-cos(argument)))/M(mindex);
     %  if abs(sin(varphiDesired)-sin(varphiInterfererRadians(n)))>0.0001
     interferenceGainLoS1(:,mindex) = (sin(1/2*argument*M(mindex)).^2)./((sin(1/2*argument).^2)*M(mindex));
-end
+end 
 %sum(abs(interferenceGainLoS1-interferenceGainLoS))
 CDFvalues_LoS = linspace(0,1,numberOfRealizations);
 

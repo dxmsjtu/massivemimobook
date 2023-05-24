@@ -40,10 +40,11 @@ for n = 1:numberOfRealizations
             %Compute the SE with non-linear processing under NLoS propagation for one realization of the Rayleigh fading.
             %We use the classic log-det formula for the uplink sum SE, when treating the inter-cell interference as colored noise
             SE_MMSE_NLoS_nonlinear(kindex,cindex) = SE_MMSE_NLoS_nonlinear(kindex,cindex) + real(log2(det(eye(M) + ...,
-                SNR* H_NLoS_desired(1:M,1:K(kindex),n)*H_NLoS_desired(1:M,1:K(kindex),n)' +  SNR*H_NLoS_interfering(1:M,1:K(kindex),n)*H_NLoS_interfering(1:M,1:K(kindex),n)' )) ...,
+                SNR* H_NLoS_desired(1:M,1:K(kindex),n)*H_NLoS_desired(1:M,1:K(kindex),n)' + ...,
+                SNR*H_NLoS_interfering(1:M,1:K(kindex),n)*H_NLoS_interfering(1:M,1:K(kindex),n)' )) ...,
                 - log2(det(eye(M)+SNR*H_NLoS_interfering(1:M,1:K(kindex),n)*H_NLoS_interfering(1:M,1:K(kindex),n)')))/numberOfRealizations;            
             %Compute the SE with M-MMSE under NLoS propagation for one realization of the Rayleigh fading            
-            %Compute the M-MMSE combining vectors
+            %Compute the M-MMSE combining vectors Compute the M-MMSE combining vectors c.f. (1.42)
             MMMSEfilter = ( SNR* H_NLoS_desired(1:M,1:K(kindex),n)*H_NLoS_desired(1:M,1:K(kindex),n)' +  ...,
                 SNR* H_NLoS_interfering(1:M,1:K(kindex),n)*H_NLoS_interfering(1:M,1:K(kindex),n)' + eye(M) ) \ (SNR*H_NLoS_desired(1:M,1:K(kindex),n));            
             %Compute the intra-cell channel powers after M-MMSE combining
@@ -60,11 +61,11 @@ for n = 1:numberOfRealizations
         end
     end
 end%% Plot the simulation results
-figure(1); hold on; box on;
-plot(K,SE_MMSE_NLoS_montecarlo(:,4)./SE_MMSE_NLoS_nonlinear(:,4),'r-','LineWidth',1);
-plot(K,SE_MMSE_NLoS_montecarlo(:,3)./SE_MMSE_NLoS_nonlinear(:,3),'k-.','LineWidth',1);
-plot(K,SE_MMSE_NLoS_montecarlo(:,2)./SE_MMSE_NLoS_nonlinear(:,2),'b--','LineWidth',1);
-plot(K,SE_MMSE_NLoS_montecarlo(:,1)./SE_MMSE_NLoS_nonlinear(:,1),'k:','LineWidth',1);    
+figure(1); hold on; box on; LineWidth = 2;
+plot(K,SE_MMSE_NLoS_montecarlo(:,4)./SE_MMSE_NLoS_nonlinear(:,4),'r-','LineWidth',LineWidth);
+plot(K,SE_MMSE_NLoS_montecarlo(:,3)./SE_MMSE_NLoS_nonlinear(:,3),'k-.','LineWidth',LineWidth);
+plot(K,SE_MMSE_NLoS_montecarlo(:,2)./SE_MMSE_NLoS_nonlinear(:,2),'b--','LineWidth',LineWidth);
+plot(K,SE_MMSE_NLoS_montecarlo(:,1)./SE_MMSE_NLoS_nonlinear(:,1),'k:','LineWidth',LineWidth);    
 xlabel('Number of UEs (K)'); ylabel('Fraction of non-linear performance');legend('M/K=8','M/K=4','M/K=2','M/K=1','Location','SouthWest');
 ylim([0.5 1]); Post_plot;
 %This Matlab script can be used to reproduce Figure 1.18 in the monograph:

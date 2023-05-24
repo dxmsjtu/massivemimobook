@@ -46,3 +46,5 @@ plot(SNRdB,mean(NMSE(:,:,2),2),'r--','LineWidth',1);
 plot(SNRdB,mean(NMSE(:,:,3),2),'b-.','LineWidth',1);
 xlabel('Effective SNR [dB]'); ylabel('NMSE'); set(gca,'YScale','log');
 legend('M=1','M=10','M=100','Location','SouthWest'); Post_plot;
+set(gcf,'outerposition',get(0,'screensize'));
+

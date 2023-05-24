@@ -5,6 +5,7 @@
 %This is version 1.01 (Last edited: 2018-08-17) 
 %License: This code is licensed under the GPLv2 license. If you in any way use this code for
 %research that results in publications, please cite our monograph as described above.
+
 %Empty workspace and close figures
 close all; clear all;
 %Define the SNR
@@ -58,7 +59,7 @@ for m = 1:Mmax
     %Second summation
     for l = 0:Mmax-m        
         %Second term that depend only on m and l
-        term2 = term1 * (-1).^(M-m-l+1) ./ (SNR.^(M-m-l)  .* factorial(abs(M-m-l)) * log(2));        
+        term2 = term1 * (-1).^(M-m-l+1) ./ (SNR.^(M-m-l).* factorial(abs(M-m-l)) * log(2));        
         %Third and fourth summation
         term3 = exp(1/SNR)*expint(1/SNR);        
         for n = 1:l            
@@ -73,12 +74,12 @@ for m = 1:Mmax
     end    
 end
 %% Plot the simulation results
-figure; hold on; box on;
-plot(M,mean(SE_LoS,2),'k-','LineWidth',1);
-plot(M(1),mean(SE_NLoS_montecarlo(1,:),2),'bd-.','LineWidth',1);
+figure; hold on; box on;LineWidth = 2;
+plot(M,mean(SE_LoS,2),'k-','LineWidth',LineWidth);
+plot(M(1),mean(SE_NLoS_montecarlo(1,:),2),'bd-.','LineWidth',LineWidth);
 plot(M,SE_NLoS_lower,'r--','LineWidth',1);
-plot(M(10:10:end),mean(SE_NLoS_montecarlo(10:10:end,:),2),'bd','LineWidth',1);
-plot(M,SE_NLoS,'b-.','LineWidth',1);
+plot(M(10:10:end),mean(SE_NLoS_montecarlo(10:10:end,:),2),'bd','LineWidth',LineWidth);
+plot(M,SE_NLoS,'b-.','LineWidth',LineWidth);
 % plot(M(1:1:end),mean(SE_NLoS_montecarlo(1:1:end,:),2),'g-','LineWidth',1);
 
 xlabel('Number of antennas (M)');

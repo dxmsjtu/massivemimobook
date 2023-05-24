@@ -43,9 +43,9 @@ plot(1:M,10*log10(eigenvalues_uncorr),'k:','LineWidth',1);
 xlabel('Eigenvalue number in decreasing order');
 ylabel('Normalized eigenvalue [dB]');
 legend('Laplace','Uniform','Gaussian','Location','SouthEast');
-ylim([-50 10]); Post_plot
-%
-%Emil Bjornson, Jakob Hoydis and Luca Sanguinetti (2017), 
+ylim([-50 10]); Post_plot;
+set(gcf,'outerposition',get(0,'screensize'));
+%%Emil Bjornson, Jakob Hoydis and Luca Sanguinetti (2017), 
 %"Massive MIMO Networks: Spectral, Energy, and Hardware Efficiency", 
 %Foundations and Trends in Signal Processing: Vol. 11, No. 3-4, 
 %pp. 154-655. DOI: 10.1561/2000000093.

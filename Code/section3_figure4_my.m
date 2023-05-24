@@ -51,3 +51,4 @@ plot(varphiInterfererDegrees,correlationcoeff(:,3),'b-.','LineWidth',1);
 xlabel('Angle of interfering UE [degree]');ylabel('Antenna-averaged correlation coefficient');
 xlim([-180 180]);ylim([0 1.1]);legend('M=1','M=10','M=100','Location','Best');
 Post_plot;
+set(gcf,'outerposition',get(0,'screensize'));

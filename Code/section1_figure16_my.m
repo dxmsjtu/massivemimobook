@@ -24,12 +24,13 @@ numberOfRealizations = 100; %10000
 H_NLoS_desired = sqrt(1/2)*(randn(Mmax,Kmax,numberOfRealizations)+1i*randn(Mmax,Kmax,numberOfRealizations));
 H_NLoS_interfering = sqrt(betabar/2)*(randn(Mmax,Kmax,numberOfRealizations)+1i*randn(Mmax,Kmax,numberOfRealizations));
 %Generate random UE angles from 0 to 2*pi
-varphiDesired = 2*pi*rand(1,Kmax,numberOfRealizations);  varphiInterfering = 2*pi*rand(1,Kmax,numberOfRealizations);
+varphiDesired     = 2*pi*rand(1,Kmax,numberOfRealizations);  
+varphiInterfering = 2*pi*rand(1,Kmax,numberOfRealizations);
 %Define the antenna spacing (in number of wavelengths)
 antennaSpacing = 1/2;
 %Generate LoS channels with different random UE angles
-H_LoS_desired =  exp( repmat((0:Mmax-1)',[1 Kmax numberOfRealizations]) .* repmat(-2i*pi*antennaSpacing*sin(varphiDesired),[Mmax 1 1]) );
-H_LoS_interfering =  sqrt(betabar)*exp( repmat((0:Mmax-1)',[1 Kmax numberOfRealizations]) .* repmat(-2i*pi*antennaSpacing*sin(varphiInterfering),[Mmax 1 1]) );
+H_LoS_desired = exp( repmat((0:Mmax-1)',[1 Kmax numberOfRealizations]) .* repmat(-2i*pi*antennaSpacing*sin(varphiDesired),[Mmax 1 1]) );
+H_LoS_interfering = sqrt(betabar)*exp( repmat((0:Mmax-1)',[1 Kmax numberOfRealizations]) .* repmat(-2i*pi*antennaSpacing*sin(varphiInterfering),[Mmax 1 1]) );
 %Preallocate matrices for storing the simulation results
 SE_MR_NLoS_montecarlo = zeros(length(K),length(M));
 SE_MR_LoS = zeros(length(K),length(M));
@@ -47,13 +48,14 @@ for n = 1:numberOfRealizations
         for mindex = 1:length(M)                        
             %Compute the SE with MR under LoS propagation using (1.43) for one realization of the UE angles            
             %Compute the uplink SE with MR combining
-            argumentsDesired = 2*pi*antennaSpacing*( repmat(sin(varphiDesired(1,1:K(kindex),n)),[K(kindex) 1])  -  repmat(sin(varphiDesired(1,1:K(kindex),n))',[1 K(kindex)]) );
+            argumentsDesired =     2*pi*antennaSpacing*( repmat(sin(varphiDesired(1,1:K(kindex),n)),[K(kindex) 1])  -  repmat(sin(varphiDesired(1,1:K(kindex),n))',[1 K(kindex)]) );
             argumentsInterfering = 2*pi*antennaSpacing*( repmat(sin(varphiDesired(1,1:K(kindex),n)),[K(kindex) 1])  -  repmat(sin(varphiInterfering(1,1:K(kindex),n))',[1 K(kindex)]) );
             oneminuscos = (1-cos(argumentsDesired)) + eye(K(kindex));            
             %Compute the uplink SE with MR combining  %implemented slightly differently from (1.28) using the identity sin^2(x)= (1-cos(2x))/2   
             %SE_MR_LoS(kindex,mindex) = SE_MR_LoS(kindex,mindex) + sum(log2(1 + SNR*M(mindex)*ones(1,K(kindex))  ./ ( (SNR/M(mindex))*sum( (1-cos(M(mindex)*argumentsDesired)) ./ oneminuscos,1) + (SNR/M(mindex))*betabar*sum( (1-cos(M(mindex)*argumentsInterfering)) ./ (1-cos(argumentsInterfering)), 1) + 1)))/numberOfRealizations;                       
             SE_MR_LoS(kindex,mindex) = SE_MR_LoS(kindex,mindex) + sum(log2(1 + SNR*M(mindex)*ones(1,K(kindex))  ./( (SNR/M(mindex))*...,
-                sum( (1-cos(M(mindex)*argumentsDesired)) ./ oneminuscos,1) + (SNR/M(mindex))*betabar*sum( (1-cos(M(mindex)*argumentsInterfering)) ./ (1-cos(argumentsInterfering)), 1) + 1)))/numberOfRealizations;                       
+                sum( (1-cos(M(mindex)*argumentsDesired)) ./ oneminuscos,1) +...,
+                (SNR/M(mindex))*betabar*sum( (1-cos(M(mindex)*argumentsInterfering)) ./ (1-cos(argumentsInterfering)), 1) + 1)))/numberOfRealizations;                       
             %Compute the SE with M-MMSE under LoS propagation using (1.43);Compute the M-MMSE combining vectors (1.42)
             MMMSEvectors = ( SNR* H_LoS_desired(1:M(mindex),1:K(kindex),n)*H_LoS_desired(1:M(mindex),1:K(kindex),n)'...,
                 + SNR*H_LoS_interfering(1:M(mindex),1:K(kindex),n)*H_LoS_interfering(1:M(mindex),1:K(kindex),n)' + eye(M(mindex)) ) \ (SNR*H_LoS_desired(1:M(mindex),1:K(kindex),n));            
