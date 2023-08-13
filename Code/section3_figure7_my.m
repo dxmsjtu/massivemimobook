@@ -27,6 +27,8 @@ SNR2dB = SNR1dB-10; SNR2 = 10.^(SNR2dB/10);
 NMSE_MMSE = zeros(length(SNR1dB),length(varphiInterfererRadians),length(varphiDesiredRadians),length(M));
 NMSE_EWMMSE = zeros(length(SNR1dB),length(varphiInterfererRadians),length(varphiDesiredRadians),length(M));
 NMSE_LS = zeros(length(SNR1dB),length(varphiInterfererRadians),length(varphiDesiredRadians),length(M));
+RatioRange = [10:12]/10;
+
 %% Go through all angles of desired UE
 for n1 = 1:length(varphiDesiredRadians)
     %Output simulation progress
@@ -62,3 +64,4 @@ ylim([1e-2 1e1]);
 %legend('LS','EW-MMSE','MMSE','Location','SouthWest');
 legend('LS','EW-MMSE','MMSE','Location','NorthEast');
 Post_plot;
+set(gcf,'outerposition',get(0,'screensize'));

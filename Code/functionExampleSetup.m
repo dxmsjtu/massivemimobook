@@ -100,14 +100,18 @@ for l = 1:L
         %local scattering model
         for k = 1:K            
             angleBSj = angle(UEpositions(k,l)-BSpositionsWrapped(j,whichpos(k)));            
-            if accuracy == 1 %Use the exact implementation of the local scattering model                
+            if accuracy == 1 %Use the exact implementation of the local scattering model  
+               % tic
                 for spr = 1:length(ASDdeg)                    
                     R(:,:,k,l,j,spr) = functionRlocalscattering(M,angleBSj,ASDdeg(spr),antennaSpacing);                    
-                end                
-            elseif accuracy == 2 %Use the approximate implementation of the local scattering model                
+                end           
+               % toc
+            elseif accuracy == 2 %Use the approximate implementation of the local scattering model        
+                % tic
                 for spr = 1:length(ASDdeg)                    
                     R(:,:,k,l,j,spr) = functionRlocalscatteringApprox(M,angleBSj,ASDdeg(spr),antennaSpacing);                    
-                end                
+                end     
+                % toc
             end            
         end        
     end    

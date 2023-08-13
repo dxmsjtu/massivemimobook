@@ -69,7 +69,7 @@ complexity_SMMSE = receiverProcessing + 3*M.^2*K/2 + M*K/2 + (M.^3-M)/3; %S-MMSE
 complexity_RZF = receiverProcessing + 3*K.^2*M/2 + 3*M*K/2 + (K^3-K)/3; %RZF
 complexity_ZF = receiverProcessing + 3*K^2*M/2 + M*K/2 + (K^3-K)/3; %ZF
 complexity_MR = receiverProcessing; %MR
-Post_plot;
+Post_plot;set(gcf,'outerposition',get(0,'screensize'));
 
 
 
@@ -98,4 +98,4 @@ ylabel('Number of complex multiplications');
 set(gca,'YScale','log');
 
 legend('M-MMSE','S-MMSE','RZF','ZF','MR','Location','NorthWest');
-Post_plot;
+Post_plot;set(gcf,'outerposition',get(0,'screensize'));

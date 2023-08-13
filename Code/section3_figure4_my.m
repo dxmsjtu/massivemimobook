@@ -29,7 +29,7 @@ R1 = functionRlocalscattering(max(Mvalues),thetaDesired,ASD,antennaSpacing);
 %% Go through all angles of interfering UE
 for n = 1:length(varphiInterfererRadians)    
     %Output simulation progress
-   if mod(n,10)==1 disp([num2str(n) ' angles out of ' num2str(length(varphiInterfererRadians))]);    end    
+   if mod(n,20)==1 disp([num2str(n) ' angles out of ' num2str(length(varphiInterfererRadians))]);    end    
     %Compute the spatial correlation matrix of the interfering UE
     R2 = functionRlocalscattering(max(Mvalues),varphiInterfererRadians(n),ASD,antennaSpacing);    
     %Go through all number of antennas

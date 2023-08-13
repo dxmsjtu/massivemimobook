@@ -30,14 +30,14 @@ R1 = functionRlocalscattering(M,varphiDesired,ASDdeg,antennaSpacing);
 %% Go through all angles of interfering UE
 for n = 1:length(varphiInterfererRadians)    
     %Output simulation progress
-    if mod(n,10)==1 
+    if mod(n,20)==1 
         disp([num2str(n) ' angles out of ' num2str(length(varphiInterfererRadians))]);   
     end
     %Compute the spatial correlation matrix of the interfering UE
     R2 = functionRlocalscattering(M,varphiInterfererRadians(n),ASDdeg,antennaSpacing);    
     %Go through all number of antennas
     for s = 1:length(SNR2dB)        
-        %Compute the NMSE according  (3.10), (3.11), and (3.20)  when having spatial correlation
+        %Compute the NMSE according  (3.10), (3.11), and (3.20) when having spatial correlation
         NMSE_corr(n,s) = 1 - SNR1*abs(trace(R1*((SNR1*R1+SNR2(s)*R2+eye(M))\R1)))/trace(R1);        
     end    
 end

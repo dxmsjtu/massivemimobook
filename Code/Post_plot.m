@@ -1,4 +1,4 @@
-h  =gcf;    % 获得当前figure 句柄，大家需要用这个模板来画图，仔细调整画图规范
+h  =gcf;      % 获得当前figure 句柄，大家需要用这个模板来画图，仔细调整画图规范;下面的参数可以根据具体显示器尺寸就行调整；
 MarkerSize=9;  LineWidth =2; LineMethod =1; PlotMethod =1; FontSize=22; FontSize= 24 ; LineWidth = 3;
 TitleFontSize =20; LegendFontSize =24; axis_ratio=1.5; YLabelFontSize =24;
 myboldify(h,MarkerSize,YLabelFontSize,FontSize,LineWidth,LegendFontSize,TitleFontSize)
@@ -46,5 +46,6 @@ for i = 1:length(ha)
         end
     end
 end
+set(gcf,'outerposition',get(0,'screensize'));
 end
 

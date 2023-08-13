@@ -10,7 +10,7 @@ close all; clear all;
 %Define number of UEs per cell
 K = 10;
 %Define the range of BS antennas
-Mrange = 10:10:100;
+Mrange = 10:4:100;
 %Define the pilot length
 tau_p = K;
 %Complexity of MMSE channel estimation, based on Table 3.1

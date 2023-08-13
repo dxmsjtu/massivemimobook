@@ -10,7 +10,8 @@ close all; clear all;
 %Number of BS antennas
 M = 100;
 %Define range of samples in the sample correlation matrices
-sampleRange = [1 10 15 20:10:90 100:50:500]; SimLenRatio =40; % for speed up;
+sampleRange = [1 10 15 20:10:90 100:50:500];
+SimLenRatio = 1; % for speed up; 1 is the default value;
 sampleRange = ceil([1 10 15 20:10:90 100:50:500]/SimLenRatio);
 %Number of realizations in the Monte Carlo simulation (per angle)
 numberOfRealizations = ceil(50/SimLenRatio);
@@ -19,7 +20,7 @@ ASD = 10;
 %Define the range of nominal angles of arrival
 varphiRange = linspace(-pi,+pi,50);
 %Range of coefficients in the linear combination between correlation matrix estimates
-linearCombination = linspace(0,1,ceil(100/SimLenRatio));
+linearCombination = linspace(0,1,ceil(100/10/SimLenRatio)+1);
 %Define the antenna spacing (in number of wavelengths)
 antennaSpacing = 1/2; %Half wavelength distance
 %Define the effective SNR in (3.13), including processing gain
@@ -30,7 +31,7 @@ NMSE_samples = zeros(length(sampleRange),length(linearCombination),length(varphi
 %% Go through the range of nominal angles
 for r = 1:length(varphiRange)    
     %Output simulation progress
-    if mod(r,10)==1 disp([num2str(r) ' angles out of ' num2str(length(varphiRange))]);   end
+    if mod(r,2)==1 disp([num2str(r) ' angles out of ' num2str(length(varphiRange))]);   end
     %Compute the spatial correlation matrix
     R = functionRlocalscattering(M,varphiRange(r),ASD,antennaSpacing);    
     %Compute square root of the spatial correlation matrix
@@ -64,13 +65,26 @@ for r = 1:length(varphiRange)
 end
 %Compute the average over the different nominal angles and then find the linar combination that minimizes this average NMSE
 NMSE_samples_opt = min(mean(NMSE_samples,3),[],2);
+% size(NMSE_samples) = （SampleNum*LinComNum*VarPhiNum）
+% size(mean(NMSE_samples,3)) = (SampleNum*LinComNum）
+TmpSorted =mean(NMSE_samples,3);
+for i=1:size(NMSE_samples_opt,1)
+    [NMSE_samples_opt_sorted(i,:),NMSE_samples_opt_sortedIndex(i,:)] = sort(abs(TmpSorted(i,:)));
+     NMSE_samples_opt_1(i)= NMSE_samples_opt_sorted(i,1);
+end
+
+
 %Copmute the NMSE for uncorrelated channels
+
 NMSE_uncorrelated = 1/(SNR+1);
 %% Plot the simulation results
 figure;hold on; box on;
 plot(sampleRange,real(NMSE_samples_opt),'k-','LineWidth',1);
 plot([min(sampleRange) max(sampleRange)],mean(NMSE_ideal)*ones(1,2),'r--','LineWidth',1);
 plot([min(sampleRange) max(sampleRange)],mean(NMSE_uncorrelated)*ones(1,2),'b-.','LineWidth',1);
-xlabel('Number of samples (N)');ylabel('NMSE');set(gca,'YScale','log');
-ylim([1e-2 1e-1]);legend('Estimated correlation matrix','Location','SouthWest');
+xlabel('Number of samples (N)');ylabel('NMSE');
+set(gca,'YScale','log');
+ylim([1e-2 1e-1]);
+legend('Estimated correlation matrix','Limit: Completely known correlation matrix','Limit: Known diagonal of correlation matrix','Location','SouthWest');
 Post_plot;
+set(gcf,'outerposition',get(0,'screensize'));
